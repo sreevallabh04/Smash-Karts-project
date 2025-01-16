@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Car, History, BarChart } from 'lucide-react';
 import MatchForm from './components/MatchForm';
 import MatchHistory from './components/MatchHistory';
 import Statistics from './components/Statistics';
 import type { Match } from './types';
+console.log(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 
-function App() {
+
+const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY; // Replace with your Clerk frontend API key.
+
+function AppContent() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [view, setView] = useState<'form' | 'history' | 'stats'>('form');
 
@@ -17,10 +23,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-900 relative overflow-hidden">
-      {/* Animated Background Grid */}
       <div className="absolute inset-0 bg-grid opacity-30"></div>
-      
-      {/* Decorative Cars */}
       <div className="absolute top-10 left-10 floating-car" style={{ animationDelay: '0s' }}>
         <Car size={48} className="text-blue-500 opacity-30" />
       </div>
@@ -31,14 +34,9 @@ function App() {
         <Car size={48} className="text-purple-500 opacity-30" />
       </div>
 
-      {/* Main Content */}
-      <motion.div
-        initial={{ y: -20 }}
-        animate={{ y: 0 }}
-        className="max-w-6xl mx-auto relative z-10 p-8"
-      >
+      <motion.div initial={{ y: -20 }} animate={{ y: 0 }} className="max-w-6xl mx-auto relative z-10 p-8">
         <header className="text-center mb-8">
-          <motion.h1 
+          <motion.h1
             className="text-4xl font-bold mb-4 flex items-center justify-center gap-2 text-white"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
@@ -48,7 +46,7 @@ function App() {
             <span className="neon-glow">Smash Karts Tracker</span>
             <Car className="text-red-500" />
           </motion.h1>
-          <motion.div 
+          <motion.div
             className="flex justify-center gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -115,4 +113,30 @@ function App() {
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <SignedIn>
+                <AppContent />
+              </SignedIn>
+            }
+          />
+          <Route path="/sign-in/*" element={<RedirectToSignIn />} />
+          <Route
+            path="*"
+            element={
+              <SignedOut>
+                <RedirectToSignIn />
+              </SignedOut>
+            }
+          />
+        </Routes>
+      </Router>
+    </ClerkProvider>
+  );
+}
