@@ -131,13 +131,87 @@ function AppContent() {
 
 export default function App() {
   return (
-    <div>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <AppContent />
+<div >
+      
+<SignedIn>
+        <AppContent/>
       </SignedIn>
+        <div className="text-center">
+          <SignedOut>
+          <div className="relative min-h-screen bg-slate-900 overflow-hidden flex items-center justify-center">
+  {/* Background Gradient */}
+  <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-black to-slate-900"></div>
+
+  {/* Floating Particles */}
+  <div className="absolute inset-0 pointer-events-none">
+    {Array.from({ length: 50 }).map((_, i) => (
+      <div
+        key={i}
+        className="absolute w-2 h-2 bg-cyan-500 rounded-full animate-float"
+        style={{
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+          animationDelay: `${Math.random() * 5}s`,
+          animationDuration: `${Math.random() * 5 + 5}s`,
+        }}
+      ></div>
+    ))}
+  </div>
+
+  {/* Glowing Overlay */}
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(0,255,255,0.15)_0%,_transparent_80%)] pointer-events-none"></div>
+
+  {/* Button Wrapper */}
+  <div className="relative z-10 text-center">
+    <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-400 to-purple-500 mb-8">
+      Welcome to Smash Karts Tracker 🚀
+    </h1>
+
+    {/* Futuristic Button */}
+    <SignInButton>
+      <motion.button
+        whileHover={{
+          scale: 1.1,
+          boxShadow: "0 0 20px 5px rgba(0, 200, 255, 0.9)",
+        }}
+        whileTap={{
+          scale: 0.95,
+          boxShadow: "0 0 10px 2px rgba(0, 150, 255, 0.8)",
+        }}
+        className="relative px-10 py-4 text-white text-lg font-semibold rounded-xl shadow-lg transition-all duration-300 
+                   bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 hover:from-purple-600 hover:to-blue-500"
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          zIndex: 1,
+        }}
+      >
+        {/* Glowing Borders */}
+        <div className="absolute inset-0 rounded-xl z-[-1]">
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-teal-400 to-indigo-500 opacity-20 blur-xl"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          ></motion.div>
+        </div>
+
+        {/* Inner Glow Ring */}
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle,_rgba(0,255,255,0.5)_10%,_transparent_70%)] 
+          rounded-xl opacity-30 pointer-events-none"
+        ></div>
+
+        {/* Button Text */}
+        <span className="relative z-10">🚀 Sign In</span>
+      </motion.button>
+    </SignInButton>
+  </div>
+</div>
+
+
+          </SignedOut>
+        </div>
+      
     </div>
   );
 }
